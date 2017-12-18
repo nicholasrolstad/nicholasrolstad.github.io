@@ -22,7 +22,7 @@ body {
 }
 
 .background {
-	 background-image: url("basemap_light.png");
+	 background-image: url("basemap_light.jpg");
 	 background-color: #fcfcf8;
 	 background-position: center center no-repeat;
 	 background-attachment: fixed;
