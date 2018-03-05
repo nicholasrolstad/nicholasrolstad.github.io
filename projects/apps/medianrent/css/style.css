@@ -1,0 +1,197 @@
+/*-- STYLESHEET FOR MEDIAN 3BR RENT PROJECT - NICHOLAS ROLSTAD --*/
+
+/*-- general styles for entire page --*/
+* {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+
+body {
+	padding: 0;
+	margin: 0;
+}
+
+html, body, #map {
+	height: 100%;
+	width: 100%;
+}
+
+/*-- style title div--*/
+.title {
+	background-color: #3e3a39;
+	color: #fafaee;
+	font-size: 40px;
+	font-family: 'Bitter', serif;
+	font-weight: 700;
+	text-align: center;
+	padding-top: 10px;
+	line-height: 75%;
+	width: 500px;
+	height: 90px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 10;
+	border-bottom-left-radius: 7px;
+}
+
+/*-- style subtitle --*/
+.subhead {
+	font-size: 16px;
+	font-family: 'Roboto', serif;
+	font-weight: 400;
+	font-style: italic;
+}
+
+/*-- style legend div --*/
+.legend {
+	padding-top: 10px;
+	width: 257px;
+	height: 97px;
+	position: absolute;
+	bottom: 160px;
+	right: 45px;
+	z-index: 10;
+}
+
+/*-- style how-to section --*/
+.how-to {
+	font-size: 14px;
+	font-family: 'Roboto', san-serif;
+	font-weight: 700;
+	color: #3e3a39;
+	line-height: 130%;
+	padding-top: 10px;
+	width: 400px;
+	height: 90px;
+	position: absolute;
+	bottom: 110px;
+	left: 40px;
+	z-index: 15;
+}
+
+/*-- adjust layer control location --*/
+.leaflet-control-layers {
+	left: 35px;
+	top: -66px;
+}
+
+/*-- style custom leaflet popups --*/
+.leaflet-popup-content-wrapper {
+	text-align: center;
+	background-color: #7c7c7c;
+	opacity: .95;
+}
+
+.leaflet-popup-tip {
+	border-top: 10px solid #7c7c7c;
+}
+
+.leaflet-popup-close-button {
+	opacity: 0;
+}
+
+/*-- style city/rent fonts in pop-up --*/
+.city {
+	font-size: 20px;
+	font-family: 'Bitter', serif;
+	font-weight: 900;
+	color: #fafaee;
+}
+
+.rent {
+	font-size: 26px;
+	font-family: 'Roboto', serif;
+	font-weight: 300;
+	font-style: italic;
+	line-height: 150%;
+	color: #fafaee;
+}
+
+/*-- style sequence control div --*/
+.sequence-control-container {
+    width: 350px;
+    height: 55px;
+    background-color: #3e3a39;
+    padding: 10px;
+    line-height: 45px;
+    text-align: center;
+	left: 25px;
+	bottom: 25px;
+	border-radius: 0px 0px 7px 7px;
+}
+
+.range-slider {
+    width: 200px;
+}
+
+/*-- style slider buttons --*/
+#forward {
+    float: right;
+}
+
+#reverse {
+    float: left;
+}
+
+/*-- style current year div --*/
+.year-control-container {
+    width: 350px;
+    height: 55px;
+    background-color: #3e3a39;
+    padding: 10px;
+    line-height: 45px;
+    text-align: center;
+	left: 25px;
+	bottom: 15px;
+	border-radius: 7px 7px 0px 0px;
+}
+
+/*-- select parts from custom grid --*/
+.grid-container{
+	width: 100%; 
+	margin: auto;
+	height:100%;
+}
+
+.row {
+    height:100%;
+}
+
+/*-- clearfix hack -- */ 
+.row:before, .row:after {
+	content:"";
+	display: table ;
+	clear:both;
+}
+
+[class*='col-'] {
+	float: left; 
+	min-height: 1px;
+	width: 16.66%; 
+	/*--gutter -- */
+	padding: 6px; 
+	background-color: ##efefef;
+}
+
+/*-- only 100% column used in this design--*/
+.col-6 { 
+	width: 100%;
+	background-color: #3e3a39;
+	padding: 10px;
+	height: 100%;
+}
+
+/*-- media queries --*/
+@media screen and (max-width: 1000px){
+	/*-- move legend to lower left above sequence control when screen narrows --*/
+	.legend {
+		padding-top: 10px;
+		width: 257px;
+		height: 97px;
+		position: absolute;
+		bottom: 270px;
+		left: 35px;
+		z-index: 10;
+	}
+}
