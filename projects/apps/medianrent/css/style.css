@@ -258,7 +258,44 @@ html, body, #map {
 		bottom: 15px;
 	}
 	
+	.col-6 { 
+		padding: 4px;
+	}
+	
 	/*-- used for jquery function to recognize screen width --*/
+	#mobile-indicator {
+		display: block;
+	}
+}
+
+@media screen and (max-width: 400px){
+	/*-- style sequence control div --*/
+	.sequence-control-container {
+		left: 5px;
+	}
+	
+	/*-- style current year div --*/
+	.year-control-container {
+		left: 5px;
+	}
+	
+	.legend {
+		width: 157px;
+		height: 130px;
+		bottom: 16px;
+		right: 10px;
+	}
+	
+	/*-- style how-to section --*/
+	.how-to {
+		font-size: 10px;
+		line-height: 130%;
+		width: 160px;
+		height: 100px;
+		bottom: 80px;
+		left: 13px;
+	}
+	
 	#mobile-indicator {
 		display: block;
 	}
