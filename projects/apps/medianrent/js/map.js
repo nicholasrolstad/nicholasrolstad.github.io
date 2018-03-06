@@ -8,10 +8,20 @@ function initiateMap(){
 	
 	var labelless_base = L.tileLayer('https://api.mapbox.com/styles/v1/midwestcoast/cjeeqaybd6ohg2spr5wcn78fd/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWlkd2VzdGNvYXN0IiwiYSI6ImNpd3F6djN5ZTAxY3Yyb3BmM2Z4dzlrd2UifQ.ad4-hQvgRhK2ETritdMAYw', {id: 'MapID', attribution: '&copy; ' + '<a href="https://www.mapbox.com/">Mapbox</a>' + ' | <a href="https://www.zillow.com/research/">Zillow Research</a> |' +' <a href="https://nicholasrolstad.github.io/">Nicholas Rolstad 2018</a>'})
 	
+	//adjust intial zoom and latitude based on screen size
+	if ( $('#mobile-indicator').is(':visible') ){
+		var initialZoom = 3;
+		var initialLat = 27;
+	} else {
+		var initialLat = 39.8;
+		var initialZoom = 5;
+	};
+	
+
     //create the map
 	var map = L.map('map', {
-		center: [39.8, -98.5],
-		zoom: 5,
+		center: [initialLat, -98.5],
+		zoom: initialZoom,
 		minZoom: 3,
 		maxZoom: 8,
 		inertia: false,
@@ -60,7 +70,7 @@ function pointToLayer(feature, latlng, attributes){
 
 
 //function to update symbology
-function updatePropSymbols(map, attribute){
+function updatePropSymbols(map, attribute){	
     map.eachLayer(function(layer){
         if (layer.feature && layer.feature.properties[attribute]){
             //get feature properties
@@ -95,8 +105,14 @@ function createPopup(properties, attribute, layer, radius){
 
 //function to calculate the radius of a symbol
 function calcPropRadius(attValue) {
-    //scale factor to adjust symbol size evenly
-    var scaleFactor = 3;
+	/*if statement checks size of screen to adjust scale factor by checking if #mobile-indicator
+	is visible (adjusted in css with media query (known bug...doesnt change after resizing screen
+	until sequence controls activated, best for recognizing mobile*/
+	if ( $('#mobile-indicator').is(':visible') ){
+		var scaleFactor = 1;
+	} else {
+		var scaleFactor = 3;
+	};
     //calculate area
     var area = attValue * scaleFactor;
     //calculate radius
@@ -255,6 +271,8 @@ function getData(map){
         }
     });
 };
+
+
 
 
 $(document).ready(initiateMap);

@@ -6,6 +6,8 @@
 	-moz-box-sizing: border-box;
 }
 
+
+
 body {
 	padding: 0;
 	margin: 0;
@@ -14,6 +16,11 @@ body {
 html, body, #map {
 	height: 100%;
 	width: 100%;
+}
+
+/*-- used for jquery function to recognize screen width --*/
+#mobile-indicator {
+    display: none;
 }
 
 /*-- style title div--*/
@@ -182,16 +189,77 @@ html, body, #map {
 	height: 100%;
 }
 
-/*-- media queries --*/
-@media screen and (max-width: 1000px){
+/*-- MEDIA QUERIES --*/
+
+@media screen and (max-width: 900px){
 	/*-- move legend to lower left above sequence control when screen narrows --*/
 	.legend {
-		padding-top: 10px;
-		width: 257px;
-		height: 97px;
-		position: absolute;
-		bottom: 270px;
-		left: 35px;
-		z-index: 10;
+		width: 157px;
+		height: 130px;
+		bottom: 26px;
+		right: 15px;
+	}
+		/*-- style title div--*/
+	.title {
+		font-size: 24px;
+		line-height: 75%;
+		width: 200px;
+		height: 50px;
+	}
+
+	/*-- style subtitle --*/
+	.subhead {
+		font-size: 0px;
+	}
+
+
+	/*-- style city/rent fonts in pop-up --*/
+	.city {
+		font-size: 16px;
+	}
+
+	.rent {
+		font-size: 18px;
+		line-height: 100%;
+	}
+
+	/*-- style sequence control div --*/
+	.sequence-control-container {
+		width: 150px;
+		height: 55px;
+		line-height: 45px;
+		text-align: center;
+		left: 15px;
+		bottom: 25px;
+	}
+
+	.range-slider {
+		opacity: 0;
+		width: 0px;
+	}
+
+	/*-- style how-to section --*/
+	.how-to {
+		font-size: 10px;
+		line-height: 130%;
+		width: 160px;
+		height: 100px;
+		bottom: 80px;
+		left: 25px;
+	}
+
+	/*-- style current year div --*/
+	.year-control-container {
+		width: 150px;
+		height: 35px;
+		line-height: 45px;
+		text-align: center;
+		left: 15px;
+		bottom: 15px;
+	}
+	
+	/*-- used for jquery function to recognize screen width --*/
+	#mobile-indicator {
+		display: block;
 	}
 }

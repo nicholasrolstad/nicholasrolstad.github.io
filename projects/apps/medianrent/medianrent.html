@@ -28,7 +28,7 @@
 					<!-- title div -->
 					<div class="title">Rising Rent<br><span class="subhead">Median 3-Bedroom Rent in America's Largest Metros 2011-2017</span></div>
 					<!-- legend div -->
-					<div class="legend"><img src="img/legend.svg" /></div>
+					<div class="legend"><img id="legendsvg" src="img/legend.svg" /></div>
 					<div class="how-to">Use the timeline below to cycle through the years. <br> Click on circles to view rental data. </div>
 					<!-- sequence control div is created dynamically in map.js -->
 					<script type="text/javascript" src="js/map.js"></script>
@@ -36,6 +36,8 @@
 			</div>
         </div>
     </div>
+	<!-- non-active div only needed for jquery function -->
+	<div id="mobile-indicator"></div>
 </body>
 	
 </html>
