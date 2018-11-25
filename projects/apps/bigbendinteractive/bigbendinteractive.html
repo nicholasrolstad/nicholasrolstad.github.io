@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Big Bend Interactive Park Map</title>
+    <meta charset="utf-8" />
+    <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+	<script src='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.js'></script>
+	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+	<script src="https://unpkg.com/esri-leaflet@2.2.3/dist/esri-leaflet.js" integrity="sha512-YZ6b5bXRVwipfqul5krehD9qlbJzc6KOGXYsDjU9HHXW2gK57xmWl2gU6nAegiErAqFXhygKIsWPKbjLPXVb2g==" crossorigin=""></script>
+	<link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.0.4/dist/MarkerCluster.Default.css">
+	<link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.0.4/dist/MarkerCluster.css">
+	<script src="https://unpkg.com/leaflet.markercluster@1.0.4/dist/leaflet.markercluster.js"></script>
+	<script src="https://unpkg.com/esri-leaflet-cluster@2.0.0"></script>
+	<link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder/dist/esri-leaflet-geocoder.css">
+    <script src="https://unpkg.com/esri-leaflet-geocoder"></script>
+	<link href='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.css' rel='stylesheet' />
+	<link rel="stylesheet" href="css/style.css" />
+	
+<style>
+	@import url('https://fonts.googleapis.com/css?family=Abril+Fatface|Barlow:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i');
+	@import url('https://fonts.googleapis.com/css?family=Raleway:200,400,500');
+	@import url('https://fonts.googleapis.com/css?family=Playfair+Display:400,700,900');
+</style>       
+</head>
+	
+<body>
+	<div class="container">
+		<div class="portrait"><div class="warningtext">THIS MAP IS BEST VIEWED IN LANDSCAPE MODE! <br> PLEASE ROTATE YOUR DEVICE</div></div>
+		<div id="control-panel" class = "control-panel-open">
+			<div class="title">Big Bend National Park</div>
+			<div>Interactive Visitor Map</div>
+			<div class="themes">
+				<button id="hiking-btn" class="theme-btn">BY-FOOT</button>
+				<button id="driving-btn" class="theme-btn">BY-VEHICLE</button>
+				<button id="general-btn" class="theme-btn-selected">OVERVIEW</button>
+			</div>
+			<div class="theme-controls">
+				<button id="roads-btn" class="layer-btn-selected">Roads</button>
+				<button id="trails-btn" class="layer-btn">Trails</button>
+				<button id="BCcamp-btn" class="layer-btn">Backpacking Campsites</button>
+				<button id="FCcamp-btn" class="layer-btn">Car Access Campsites</button>
+				<button id="trailheads-btn" class="layer-btn">Trailheads</button>
+				<button id="POI-btn" class="layer-btn">Points of Interest</button>
+			</div>
+			<div class="legend">
+			<div class="legend-title">Map Legend</div>
+				<div id="Proads-legend" class="legend-item">
+					<img id="Proads-legend-symbol" src="images/roads-paved.svg" class="item-symbol"><div id="Proads-legend-label" class="item-label">Paved Park Road</div>
+				</div>
+				<div id="UProads-legend" class="legend-item">
+					<img id="UProads-legend-symbol" src="images/roads-unpaved.svg" class="item-symbol"><div id="UProads-legend-label" class="item-label">Dirt & Gravel Road</div>
+				</div>
+				<div id="trails-legend" class="legend-item-removed">
+					<img id="trails-legend-symbol" src="images/trails.svg" class="item-symbol-removed"><div id="trails-legend-label" class="item-label-removed">Trail</div>
+				</div>
+				<div id="BCcampsite-legend" class="legend-item-removed">
+					<img id="BCcampsite-legend-symbol" src="images/campsiteBC.svg" class="item-symbol-removed"><div id="BCcampsite-legend-label" class="item-label-removed">Backpacking Campsite</div>
+				</div>
+				<div id="RDcampsite-legend" class="legend-item-removed">
+					<img id="RDcampsite-legend-symbol" src="images/campsiteRD.svg" class="item-symbol-removed"><div id="RDcampsite-legend-label" class="item-label-removed">Car-Accessible Campsite</div>
+				</div>
+				<div id="campsiteAvailable-legend" class="legend-item-removed">
+					<img id="campsiteAvailable-legend-symbol" src="images/campsiteAvailable.svg" class="item-symbol-removed"><div id="campsiteAvailable-legend-label" class="item-label-removed">Available Campsite</div>
+				</div>
+				<div id="campsiteOccupied-legend" class="legend-item-removed">
+					<img id="campsiteOccupied-legend-symbol" src="images/campsiteOccupied.svg" class="item-symbol-removed"><div id="campsiteOccupied-legend-label" class="item-label-removed">Occupied Campsite</div>
+				</div>
+				<div id="trailhead-legend" class="legend-item-removed">
+					<img id="trailhead-legend-symbol" src="images/trailhead.svg" class="item-symbol-removed"><div id="trailhead-legend-label" class="item-label-removed">Trailhead</div>
+				</div>
+				<div id="canoe-legend" class="legend-item-removed">
+					<img id="canoe-legend-symbol" src="images/canoe.svg" class="item-symbol-removed"><div id="canoe-legend-label" class="item-label-removed">River Access</div>
+				</div>
+				<div id="entrance-legend" class="legend-item-removed">
+					<img id="entrance-legend-symbol" src="images/entrance.svg" class="item-symbol-removed"><div id="entrance-legend-label" class="item-label-removed">Entrance Station</div>
+				</div>
+				<div id="gasstation-legend" class="legend-item-removed">
+					<img id="gasstation-legend-symbol" src="images/gasstation.svg" class="item-symbol-removed"><div id="gasstation-legend-label" class="item-label-removed">Gas Station</div>
+				</div>
+				<div id="overlook-legend" class="legend-item-removed">
+					<img id="overlook-legend-symbol" src="images/overlook.svg" class="item-symbol-removed"><div id="overlook-legend-label" class="item-label-removed">Scenic View</div>
+				</div>
+				<div id="parking-legend" class="legend-item-removed">
+					<img id="parking-legend-symbol" src="images/parking.svg" class="item-symbol-removed"><div id="parking-legend-label" class="item-label-removed">Parking</div>
+				</div>
+				<div id="pullout-legend" class="legend-item-removed">
+					<img id="pullout-legend-symbol" src="images/pullout.svg" class="item-symbol-removed"><div id="pullout-legend-label" class="item-label-removed">Interpretive Trail</div>
+				</div>
+				<div id="ranger-station-legend" class="legend-item-removed">
+					<img id="ranger-station-legend-symbol" src="images/ranger-station.svg" class="item-symbol-removed"><div id="ranger-station-legend-label" class="item-label-removed">Ranger Station</div>
+				</div>
+			</div>
+		</div>
+		<div id="map">
+			<script type="text/javascript" src="js/map.js"></script>
+		</div>	
+	</div>
+</body>
+	
+</html>
