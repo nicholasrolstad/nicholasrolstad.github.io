@@ -98,7 +98,7 @@ li a {
 }
 
 .header {
-	background-color: #3db2d1;
+	background-color: none;
 	width: auto;
 	height: auto;
 	border-radius: 5px;
@@ -109,7 +109,7 @@ h1 {
 	font-size: 60px;
 	font-weight: 700;
 	padding: 15px;
-	color: #fcfcf8;
+	color: #3db2d1;
 	text-align: center;
 }
 h2 {
@@ -134,7 +134,7 @@ p {
 	font-family: 'Roboto Slab', sans-serif;
 	font-size: 20px;
 	font-weight: 400;
-	color: #3c3c3c;
+	color: #111111;
 	padding: 10px 10px 25px 10px;
 }
 
@@ -325,7 +325,7 @@ li a.navHov:hover {
 		font-size: 42px;
 		font-weight: 700;
 		padding: 15px;
-		color: #fcfcf8;
+		color: #3db2d1;
 		text-align: center;
 	}
 	
@@ -390,7 +390,7 @@ li a.navHov:hover {
 		font-size: 30px;
 		font-weight: 700;
 		padding: 15px;
-		color: #fcfcf8;
+		color: #3db2d1;
 		text-align: center;
 	}
 	h2 {
