@@ -93,7 +93,7 @@ html, body {
 	
 }
 
-.btn:focus {
+.btn:focus, .panel-close:focus {
   outline: none !important;
 }
 
