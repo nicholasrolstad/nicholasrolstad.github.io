@@ -93,6 +93,10 @@ html, body {
 	
 }
 
+.btn:focus {
+  outline: none !important;
+}
+
 .loadingOn {
 	visibility: visible;
 	opacity: 1;
