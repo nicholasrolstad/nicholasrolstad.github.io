@@ -1,29 +1,14 @@
 $(document).ready(function(){
-
 // initiate variables
 var xcel = null;
 var loading_animation = "<div class=\"lds-spinner\"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>"
 var points_eligible
+const btn_classes = ['.substations-btn', '.solar-projects-btn', '.distribution-lines-btn', '.service-territory-btn']
 
 // ajax callbacks to load data
-function ajaxCallBackXcel(retString){
-	xcel = retString; // xcel service territory json
-}
-
 function ajaxCallBackCo(retString){
 	mn_counties = retString; //mn counties json
 }
-
-	
-	
-// load geojson layers
-$.ajax({
-dataType: "json",
-url: "js/xcel.json",
-success: function(data) {
-		ajaxCallBackXcel(data);
-}
-}).error(function() { console.log('error')});
 
 $.ajax({
 dataType: "json",
@@ -33,8 +18,7 @@ success: function(data) {
 }
 }).error(function() { console.log('error')});
 
-
-
+	
 var map = L.map('map', {zoomControl: false}).setView([40.03, -93.3], 5),
 	layer = L.esri.basemapLayer("Gray").addTo(map);
 	//layerLabels = L.esri.basemapLayer('GrayLabels').addTo(map);
@@ -66,9 +50,108 @@ L.control.zoom({
 
 
 //
-// style functions
+// auth functions
 //
 
+const submitBtn = document.getElementById('formSubmit');
+let token;
+
+	
+// add event listener to form
+submitBtn.addEventListener('click', addServicesFromServer);
+
+const tokenUrl = 'https://www.arcgis.com/sharing/rest/generateToken';
+	
+// function to make request to server
+function serverAuth (server, username, password, callback) {
+  L.esri.post(server, {
+    username: username,
+    password: password,
+    f: 'json',
+    expiration: 86400,
+    client: 'referer',
+    referer: window.location.origin
+  }, callback);
+}
+
+// function to run when form submitted
+function addServicesFromServer (e) {
+  // prevent page from refreshing
+  e.preventDefault();
+
+  // get values from form
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+	
+  // generate token from server and add service from callback function
+  serverAuth(tokenUrl, username, password, function (error, response) {
+    if (error) {
+			console.log(error)
+			$('.log-in-status').addClass('alert alert-danger');
+			if ($( ".log-in-status" ).hasClass( "alert-success" )) {
+				$('.log-in-status').removeClass('alert-success');
+			}
+			$('.log-in-status span').text('Log-in Failed');
+      return;
+    }
+    // add layer to map
+		console.log('log-in successful')
+		$('.log-in-status').addClass('alert alert-success');
+		if ($( ".log-in-status" ).hasClass( "alert-danger" )) {
+				$('.log-in-status').removeClass('alert-danger');
+			}
+		$('.log-in-status span').text('Log-in Successful');
+		token = response.token
+  }); // end serverAuth call
+} // end addServicesFromServer call
+	
+	
+function resetBtns (btn_class) {
+	if ($(btn_class).hasClass('btn-secondary')) {
+		console.log();
+	} else {
+		console.log();
+		$(btn_class).removeClass('btn-info');
+		$(btn_class).addClass('btn-secondary');
+	}
+}
+
+function removeAllLayers () {
+	try {
+		map.removeLayer(service_territory);
+	}
+	catch {
+		console.log();
+	}
+
+	try {
+		map.removeLayer(distribution);
+	}
+	catch {
+		console.log();
+	}
+
+	try {
+		map.removeLayer(projects);
+	}
+	catch {
+		console.log();
+	}
+	try {
+		map.removeLayer(substations);
+	}
+	catch {
+		console.log();
+	}
+}
+	
+//token = "WGC2LnJ7ItVirMxXF4u6yE0RC19FFX75Tc9-miYlGx82a5dtNUrt0Vg04jxGMTXUSpPG9AQD0LmRwXmDaxv3qPnKwZBhWzQxryTi5jv2DkCD4LyCXbnSOfgp6DrT2_8m3kFaNj8Z8r5T-bV7YcrSpedb1R1ou6VolzYMOoTQSDZ4dE2UIBLIV85mviu9nT-o"
+	
+	
+	
+	
+	
+	
 //
 // feature layers
 //
@@ -84,7 +167,7 @@ var point_icon_grey = L.icon({
 })
 
 var points = L.esri.featureLayer({
-		url: 'https://services9.arcgis.com/YEQ7YfprtcM3j3JL/arcgis/rest/services/projects_view/FeatureServer/0',
+		url: 'https://services5.arcgis.com/V5xqUDxoOJurLR4H/ArcGIS/rest/services/MN_Substations/FeatureServer/0?token=xPvBROYyxm8OA7aNsNFBJzBbglsZem60_uMgV9VDqrPipVincZExeHJjMV26K2DgOa2ZcnPJDCu-BiQLoTGQu0vDyMFDyH2O-9Hw4_CPnidDkqAr_F_n3dwSMMQT-TgcsRV8JBxFrPCNEQtWP5SwW3wRgcrx-URIhqtTduUyGGQHqBWbUMhJplJXoW1C-Iurg6xATmjMeaAsPkg8AudTexjTm5nxYyldIP_9McwILZwj-vZU_fSkx68wste5yvWr6UzzHJIUZkzN6Q1E08H9mA..',
 		pointToLayer: function (geojson, latlng) {
 			return L.marker(latlng, {
 				icon: point_icon
@@ -129,7 +212,7 @@ var points_future = L.esri.featureLayer({
 						}
 				}
 	});
-	
+
 var points_eligible;
 var operating_id = String(points_operating._leaflet_id)
 var future_id = String(points_future._leaflet_id)
@@ -140,8 +223,8 @@ var ids = [operating_id, future_id]
 // initiate layers
 //
 
-points.addTo(map);
-map.removeLayer(points);
+//points.addTo(map);
+//map.removeLayer(points);
 points_operating.addTo(map);
 points_future.addTo(map);
 
@@ -159,132 +242,12 @@ map.on('popupopen', function(e) {
 });
 
 
-//var searchControl = L.esri.Geocoding.Controls.geosearch({expanded: true, collapseAfterResult: false, zoomToResult: false}).addTo(map);
-var searchControl = L.esri.Geocoding.geosearch({expanded: true, collapseAfterResult: true, zoomToResult: true, useMapBounds:false, placeholder:'Enter your address here...' }).addTo(map);
 
-searchControl.on('results', function(data){
-	$("#loading").removeClass('loadingHidden'); //set up loading animation
-	$("#loading").append(loading_animation);
-	$("#loading").addClass('loadingOn');
-	$('#operating-btn').removeClass('btn-info');
-	$('#operating-btn').addClass('btn-secondary');
-	$('#future-btn').removeClass('btn-info');
-	$('#future-btn').addClass('btn-secondary');
-	$("#panelSearch").removeClass('in');
-
-	map.eachLayer(function (layer) {  //remove all layers and add basemap back.  This isn't ideal but map.hasLayer is behaving unexpectedly here.
-  	map.removeLayer(layer);
-	});
-	L.esri.basemapLayer("Gray").addTo(map);
-	
-	setTimeout(function() { //run in timeout function to allow loading screen
-		if (data.results.length > 0) {
-			var point = turf.point([data.results[0].latlng.lng, data.results[0].latlng.lat]);
-			var isEligible = false;
-			var result = 'Not Eligible';
-			var subStatus = false;
-			for (let idx in xcel.features) {
-				if (turf.booleanPointInPolygon(point, xcel.features[idx]) === true) {
-					var isEligible = true;
-				}
-			}
-			
-			
-			if (isEligible === true) {
-				var result = 'Eligible';
-				var selected_points_locations = [];
-				var selected_points_latlng = [];
-				var name_SQL = "(";
-				for (let idx in mn_counties.features) {
-					if (turf.booleanPointInPolygon(point, mn_counties.features[idx]) === true) {
-						var buffered = turf.buffer(mn_counties.features[idx], 500, {units: 'feet'});
-						for (let idx in mn_counties.features) {
-							if (turf.booleanDisjoint(buffered, mn_counties.features[idx]) === false) {
-								for (let item in points._layers) {
-									point = turf.point(points._layers[item].feature.geometry.coordinates);
-									if (turf.booleanPointInPolygon(point, mn_counties.features[idx]) === true) {
-										if (points._layers[item].feature.properties.subscription_status === 1) {
-											subStatus = true;
-										}
-										selected_points_locations.push(points._layers[item].feature.properties.name)
-										selected_points_latlng.push(points._layers[item].feature.geometry.coordinates)
-										add_name = "'" + points._layers[item].feature.properties.name + "',";
-										name_SQL += add_name;
-									}
-								}
-							}
-						}
-					}
-				}
-
-				name_SQL = name_SQL.slice(0,-1);
-				name_SQL = name_SQL + ")";
-
-				var points_eligible = L.esri.featureLayer({
-					where: "name IN " + name_SQL,
-					url: 'https://services9.arcgis.com/YEQ7YfprtcM3j3JL/arcgis/rest/services/projects_view/FeatureServer/0',
-					pointToLayer: function (geojson, latlng) {
-						if (geojson.properties.subscription_status == 0) {
-							return L.marker(latlng, {
-								icon: point_icon_grey
-							});
-						} else {
-							return L.marker(latlng, {
-								icon: point_icon
-							});
-						}
-					},
-					onEachFeature: function(feature, layer) {
-						imageLink = "img/" + feature.properties.name.toLowerCase().replace(/ /g, "").replace("solar", "").replace(".", "").replace("uss", "") + ".jpg"
-        		layer.bindPopup("<span class=\"popup-title\">" + feature.properties.name + "</span>" + "<br><br><img src=" + imageLink + ">" + "<BR><BR>" + 
-														"<a href=\"https://www.us-solar.com/contact.html\" target=\"_blank\">" + "<span class=\"popup-contact\">Contact US Solar</span>" + "</a>", {minWidth: 300});
-					}
-				});
-				
-				points_eligible.addTo(map);
-				results_id = String(points_eligible._leaflet_id);
-				points.query().bounds(function (error, latlngbounds) {
-					map.fitBounds(latlngbounds);
-				});
-			}
-			if (isEligible === true) { // eligible and has projects open to subscription
-				if (subStatus === true) {
-					var popup = L.popup()
-						.setLatLng(data.results[0].latlng)
-						.setContent(data.results[0].text + '<BR><BR><BR>' + '<span class=\'address-result\'>' + 'You\'re eligible!' + "</span>" + '<br><br>' + 
-												'Check out the map to see which projects are available in your area.' + '<BR><BR>' + '<img src=\'img/icon.svg\' height=\'30\' width=\'30\'>' + '  Projects accepting subscribers'
-											 + '<BR>' + '<img src=\'img/icon-greyed.svg\' height=\'30\' width=\'30\'>' + '  Projects already filled' + "<BR><BR>" + 
-														"<a href=\"https://www.us-solar.com/mn-signup.html\" target=\"_blank\">" + "<span class=\"popup-contact\">Contact US Solar to subscribe today!</span>" + "</a>")
-						.openOn(map);
-				} else { // eligible but no projects or no projects open to subscription
-					var popup = L.popup()
-						.setLatLng(data.results[0].latlng)
-						.setContent(data.results[0].text + '<BR><BR><BR>' + 'All projects in your area are currently filled but you may be eligible to subscribe in the future.' + 
-												'<BR><BR>' + '<img src=\'img/icon.svg\' height=\'30\' width=\'30\'>' + '  Projects accepting subscribers'
-											 + '<BR>' + '<img src=\'img/icon-greyed.svg\' height=\'30\' width=\'30\'>' + '  Projects already filled' + "<BR><BR>" + 
-														"<a href=\"https://www.us-solar.com/contact.html\" target=\"_blank\">" + "<span class=\"popup-contact\">Contact US Solar to join our waitlist!</span>" + "</a>")
-						.openOn(map);
-				}
-			} else { // not eligible, not in xcel territory
-					var popup = L.popup()
-						.setLatLng(data.results[0].latlng)
-						.setContent(data.results[0].text + '<BR><BR><BR>' + 'Unfortunately, this address does not appear to be in Xcel Energy territory. Only Xcel Energy customers are eligible to subscribe to US Solar.')
-						.openOn(map);
-			}
-
-
-		}
-		$("#loading").removeClass('loadingOn');
-		$("#loading").addClass('loadingHidden');
-		$("#loading").removeClass('loadingOn');
-		$("#loading").empty();
-	}, 900);
-});
 
 
 
 	//
-	// jQuery listeners
+	// jQuery listeners, think about replacing these with vanilla JS code
 	//
 
 
@@ -305,7 +268,12 @@ searchControl.on('results', function(data){
 
 			$('.service-territory-btn').toggleClass('btn-info');
 			$('.service-territory-btn').toggleClass('btn-secondary');
-			console.log('YES')
+			
+			if (map.hasLayer(service_territory)) {
+				map.removeLayer(service_territory);
+			} else {
+				service_territory.addTo(map);
+			}
 			/*
 			if (map.hasLayer(points_future)) {
 				map.removeLayer(points_future);
@@ -327,6 +295,12 @@ searchControl.on('results', function(data){
 
 			$('.distribution-lines-btn').toggleClass('btn-info');
 			$('.distribution-lines-btn').toggleClass('btn-secondary');
+			
+			if (map.hasLayer(distribution)) {
+				map.removeLayer(distribution);
+			} else {
+				distribution.addTo(map);
+			}
 			/*
 			if (map.hasLayer(points_future)) {
 				map.removeLayer(points_future);
@@ -350,13 +324,13 @@ searchControl.on('results', function(data){
 
 			$('.substations-btn').toggleClass('btn-info');
 			$('.substations-btn').toggleClass('btn-secondary');
-			/*
-			if (map.hasLayer(points_future)) {
-				map.removeLayer(points_future);
+			
+			if (map.hasLayer(substations)) {
+				map.removeLayer(substations);
 			} else {
-				points_future.addTo(map);
+				substations.addTo(map);
 			}
-			*/
+			
 		});
 	
 	
@@ -372,6 +346,12 @@ searchControl.on('results', function(data){
 
 			$('.solar-projects-btn').toggleClass('btn-info');
 			$('.solar-projects-btn').toggleClass('btn-secondary');
+			
+			if (map.hasLayer(projects)) {
+				map.removeLayer(projects);
+			} else {
+				projects.addTo(map);
+			}
 			/*
 			if (map.hasLayer(points_future)) {
 				map.removeLayer(points_future);
@@ -428,55 +408,99 @@ searchControl.on('results', function(data){
 	
 	  /*  MARKET SELECTION LISTENERS  */
 		$('#itemCO').click(function () {
-				// workaround to remove results layer
-			  map.setView([39.0, -105.4], 7)
-			});
+			// workaround to remove results layer
+			map.setView([39.0, -105.4], 7)
+			btn_classes.forEach(element => resetBtns(element));
+			removeAllLayers();
+		});
 	
 		$('#itemCT').click(function () {
-				// workaround to remove results layer
-			  map.setView([41.6, -72.6], 9)
-			});
+			// workaround to remove results layer
+			map.setView([41.6, -72.6], 9)
+			btn_classes.forEach(element => resetBtns(element));
+			removeAllLayers();
+		});
 	
 		$('#itemDE').click(function () {
-				// workaround to remove results layer
-			  map.setView([39.1, -75.5], 9)
-			});
+			// workaround to remove results layer
+			map.setView([39.1, -75.5], 9)
+			btn_classes.forEach(element => resetBtns(element));
+			removeAllLayers();
+		});
 	
 		$('#itemME').click(function () {
-				// workaround to remove results layer
-			  map.setView([45.6, -69.1], 7)
-			});
+			// workaround to remove results layer
+			map.setView([45.6, -69.1], 7)
+			btn_classes.forEach(element => resetBtns(element));
+			removeAllLayers();
+		});
 	
 		$('#itemMN').click(function () {
-				// workaround to remove results layer
-			  map.setView([46.3, -93.6], 7)
+			// workaround to remove results layer
+			map.setView([46.3, -93.6], 7);
+			btn_classes.forEach(element => resetBtns(element));
+			removeAllLayers();
+
+			substations = L.esri.featureLayer({
+				url: 'https://services5.arcgis.com/V5xqUDxoOJurLR4H/ArcGIS/rest/services/MN_Substations/FeatureServer/0',
+				opacity: 1,
+				token: token
+			})
+
+			distribution = L.esri.featureLayer({
+					url: 'https://services5.arcgis.com/V5xqUDxoOJurLR4H/arcgis/rest/services/MN_Distribution_Lines/FeatureServer/0',
+					opacity: 1,
+					token: token
+				})
+
+			projects = L.esri.featureLayer({
+					url: 'https://services5.arcgis.com/V5xqUDxoOJurLR4H/arcgis/rest/services/MN_USS_Sites/FeatureServer/0',
+					opacity: 1,
+					token: token
+				})
+
+			service_territory = L.esri.featureLayer({
+					url: 'https://services5.arcgis.com/V5xqUDxoOJurLR4H/ArcGIS/rest/services/MN_ServiceAreas/FeatureServer/0',
+					opacity: 1,
+					token: token
+				})
 			});
 	
 		$('#itemNJ').click(function () {
-				// workaround to remove results layer
-			  map.setView([40.2, -74.5], 8)
-			});
+			// workaround to remove results layer
+			map.setView([40.2, -74.5], 8)
+			btn_classes.forEach(element => resetBtns(element));
+			removeAllLayers();
+		});
 	
 		$('#itemNM').click(function () {
-				// workaround to remove results layer
-			  map.setView([34.7, -106.0], 7)
-			});
+			// workaround to remove results layer
+			map.setView([34.7, -106.0], 7)
+			btn_classes.forEach(element => resetBtns(element));
+			removeAllLayers();
+		});
 
 		$('#itemNY').click(function () {
-				// workaround to remove results layer
-			  map.setView([42.9, -75.4], 7)
-			});
+			// workaround to remove results layer
+			map.setView([42.9, -75.4], 7)
+			btn_classes.forEach(element => resetBtns(element));
+			removeAllLayers();
+		});
 	
 		$('#itemPA').click(function () {
-				// workaround to remove results layer
-			  map.setView([40.8, -77.5], 8)
-			});
+			// workaround to remove results layer
+			map.setView([40.8, -77.5], 8)
+			btn_classes.forEach(element => resetBtns(element));
+			removeAllLayers();
+		});
 	
 	
 		$('#itemVA').click(function () {
-				// workaround to remove results layer
-			  map.setView([37.8, -78.9], 8)
-			});
+			// workaround to remove results layer
+			map.setView([37.8, -78.9], 8)
+			btn_classes.forEach(element => resetBtns(element));
+			removeAllLayers();
+		});
 	
 	
 

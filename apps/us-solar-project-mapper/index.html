@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="https://esri.github.io/calcite-maps/dist/css/calcite-maps-bootstrap.min-v0.10.css">
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,600" rel="stylesheet">
 
+	
 	<!-- Calcite Maps -->
 	<link rel="stylesheet" href="https://esri.github.io/calcite-maps/dist/css/calcite-maps-esri-leaflet.min-v0.10.css">
 	<link rel="stylesheet" href="https://esri.github.io/calcite-maps/dist/fonts/calcite/calcite-ui.css">
@@ -28,12 +29,12 @@
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
+	
 	<!-- Load Esri Leaflet Geocoder from CDN -->
 	<link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@2.2.3/dist/esri-leaflet-geocoder.css">
 	<script src="https://unpkg.com/esri-leaflet-geocoder@2.2.3"></script>
 </head>
 <body class="calcite-maps calcite-nav-top calcite-layout-small-title">
-
 	<!-- Navbar -->
 	<nav class="navbar calcite-navbar navbar-fixed-top calcite-bg-dark calcite-text-dark calcite-bgcolor-white" style="border-bottom: solid medium rgb(245, 149, 28);">
 		<!-- Menu -->
@@ -78,7 +79,7 @@
 				</div>
 		<div id="map" class="calcite-map-absolute"><script src="js/map.js"></script></div>
 	</div><!-- /.container -->
-
+	
 	<!-- Panel -->
 
 	<div class="calcite-panels calcite-panels-left calcite-bg-custom calcite-text-light panel-group calcite-bgcolor-custom" style="background-color: rgb(245, 149, 28);" role="tablist" aria-multiselectable="true">
@@ -103,6 +104,23 @@
 					<br>
 					<br>
 					<span style="font-weight: 600; color:rgb(245, 149, 28);"><a href="https://www.google.com" target="_blank">Need help?</a></span>
+					<form id="securedServicesForm">
+						<div class="form-component">
+							<label for="username">User Name</label>
+							<!-- this will be the username for the service -->
+							<input type="text" id="username" />
+						</div>
+						<div class="form-component">
+							<label for="password">Password</label>
+							<!-- this will be the password for the service -->
+							<input type="password" id="password">
+						</div>
+						<!-- a click event handler will be placed on this element to run our function -->
+						<button id="formSubmit" type="submit">Log-In</button>
+						<br><br>
+						<div class="log-in-status" role="alert"><span></span></div>
+					</form>
+					<br><br><br><br>
 				</div>
 			</div>
 		</div>
@@ -138,10 +156,10 @@
 			</div>
 			<div id="collapseExplore" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingExplore">
 				<div class="panel-body">
-					<button type="button" class="btn btn-info service-territory-btn" id="service-territory-btn">Service Territory</button>   
-					<button type="button" class="btn btn-info substations-btn" id="substations-btn">Substations</button>
-					<button type="button" class="btn btn-info distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>   
-					<button type="button" class="btn btn-info solar-projects-btn" id="solar-projects-btn">Solar Projects</button>  
+					<button type="button" class="btn btn-secondary substations-btn" id="substations-btn">Substations</button>
+					<button type="button" class="btn btn-secondary distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>
+					<button type="button" class="btn btn-secondary solar-projects-btn" id="solar-projects-btn">Solar Projects</button> 
+					<button type="button" class="btn btn-secondary service-territory-btn" id="service-territory-btn">Service Territory</button> 
 				</div>
 			</div>
 		</div>
@@ -156,10 +174,10 @@
 			</div>
 			<div id="collapseExplore" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingExplore">
 				<div class="panel-body">
-					<button type="button" class="btn btn-info service-territory-btn" id="service-territory-btn">Service Territory</button>   
-					<button type="button" class="btn btn-info substations-btn" id="substations-btn">Substations</button>
-					<button type="button" class="btn btn-info distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>   
-					<button type="button" class="btn btn-info solar-projects-btn" id="solar-projects-btn">Solar Projects</button>  
+					<button type="button" class="btn btn-secondary substations-btn" id="substations-btn">Substations</button>
+					<button type="button" class="btn btn-secondary distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>
+					<button type="button" class="btn btn-secondary solar-projects-btn" id="solar-projects-btn">Solar Projects</button> 
+					<button type="button" class="btn btn-secondary service-territory-btn" id="service-territory-btn">Service Territory</button> 
 				</div>
 			</div>
 		</div>
@@ -174,10 +192,10 @@
 			</div>
 			<div id="collapseExplore" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingExplore">
 				<div class="panel-body">
-					<button type="button" class="btn btn-info service-territory-btn" id="service-territory-btn">Service Territory</button>   
-					<button type="button" class="btn btn-info substations-btn" id="substations-btn">Substations</button>
-					<button type="button" class="btn btn-info distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>   
-					<button type="button" class="btn btn-info solar-projects-btn" id="solar-projects-btn">Solar Projects</button>  
+					<button type="button" class="btn btn-secondary substations-btn" id="substations-btn">Substations</button>
+					<button type="button" class="btn btn-secondary distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>
+					<button type="button" class="btn btn-secondary solar-projects-btn" id="solar-projects-btn">Solar Projects</button> 
+					<button type="button" class="btn btn-secondary service-territory-btn" id="service-territory-btn">Service Territory</button> 
 				</div>
 			</div>
 		</div>
@@ -192,10 +210,10 @@
 			</div>
 			<div id="collapseExplore" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingExplore">
 				<div class="panel-body">
-					<button type="button" class="btn btn-info service-territory-btn" id="service-territory-btn">Service Territory</button>   
-					<button type="button" class="btn btn-info substations-btn" id="substations-btn">Substations</button>
-					<button type="button" class="btn btn-info distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>   
-					<button type="button" class="btn btn-info solar-projects-btn" id="solar-projects-btn">Solar Projects</button>  
+					<button type="button" class="btn btn-secondary substations-btn" id="substations-btn">Substations</button>
+					<button type="button" class="btn btn-secondary distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>
+					<button type="button" class="btn btn-secondary solar-projects-btn" id="solar-projects-btn">Solar Projects</button> 
+					<button type="button" class="btn btn-secondary service-territory-btn" id="service-territory-btn">Service Territory</button> 
 				</div>
 			</div>
 		</div>
@@ -210,10 +228,10 @@
 			</div>
 			<div id="collapseExplore" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingExplore">
 				<div class="panel-body">
-					<button type="button" class="btn btn-info service-territory-btn" id="service-territory-btn">Service Territory</button>   
-					<button type="button" class="btn btn-info substations-btn" id="substations-btn">Substations</button>
-					<button type="button" class="btn btn-info distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>   
-					<button type="button" class="btn btn-info solar-projects-btn" id="solar-projects-btn">Solar Projects</button>  
+					<button type="button" class="btn btn-secondary substations-btn" id="substations-btn">Substations</button>
+					<button type="button" class="btn btn-secondary distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>
+					<button type="button" class="btn btn-secondary solar-projects-btn" id="solar-projects-btn">Solar Projects</button> 
+					<button type="button" class="btn btn-secondary service-territory-btn" id="service-territory-btn">Service Territory</button> 
 				</div>
 			</div>
 		</div>
@@ -228,10 +246,10 @@
 			</div>
 			<div id="collapseExplore" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingExplore">
 				<div class="panel-body">
-					<button type="button" class="btn btn-info service-territory-btn" id="service-territory-btn">Service Territory</button>   
-					<button type="button" class="btn btn-info substations-btn" id="substations-btn">Substations</button>
-					<button type="button" class="btn btn-info distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>   
-					<button type="button" class="btn btn-info solar-projects-btn" id="solar-projects-btn">Solar Projects</button>  
+					<button type="button" class="btn btn-secondary substations-btn" id="substations-btn">Substations</button>
+					<button type="button" class="btn btn-secondary distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>
+					<button type="button" class="btn btn-secondary solar-projects-btn" id="solar-projects-btn">Solar Projects</button> 
+					<button type="button" class="btn btn-secondary service-territory-btn" id="service-territory-btn">Service Territory</button> 
 				</div>
 			</div>
 		</div>
@@ -246,10 +264,10 @@
 			</div>
 			<div id="collapseExplore" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingExplore">
 				<div class="panel-body">
-					<button type="button" class="btn btn-info service-territory-btn" id="service-territory-btn">Service Territory</button>   
-					<button type="button" class="btn btn-info substations-btn" id="substations-btn">Substations</button>
-					<button type="button" class="btn btn-info distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>   
-					<button type="button" class="btn btn-info solar-projects-btn" id="solar-projects-btn">Solar Projects</button>  
+					<button type="button" class="btn btn-secondary substations-btn" id="substations-btn">Substations</button>
+					<button type="button" class="btn btn-secondary distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>
+					<button type="button" class="btn btn-secondary solar-projects-btn" id="solar-projects-btn">Solar Projects</button> 
+					<button type="button" class="btn btn-secondary service-territory-btn" id="service-territory-btn">Service Territory</button> 
 				</div>
 			</div>
 		</div>
@@ -265,10 +283,10 @@
 			</div>
 			<div id="collapseExplore" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingExplore">
 				<div class="panel-body">
-					<button type="button" class="btn btn-info service-territory-btn" id="service-territory-btn">Service Territory</button>   
-					<button type="button" class="btn btn-info substations-btn" id="substations-btn">Substations</button>
-					<button type="button" class="btn btn-info distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>   
-					<button type="button" class="btn btn-info solar-projects-btn" id="solar-projects-btn">Solar Projects</button>   
+					<button type="button" class="btn btn-secondary substations-btn" id="substations-btn">Substations</button>
+					<button type="button" class="btn btn-secondary distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>
+					<button type="button" class="btn btn-secondary solar-projects-btn" id="solar-projects-btn">Solar Projects</button> 
+					<button type="button" class="btn btn-secondary service-territory-btn" id="service-territory-btn">Service Territory</button> 
 				</div>
 			</div>
 		</div>
@@ -283,10 +301,10 @@
 			</div>
 			<div id="collapseExplore" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingExplore">
 				<div class="panel-body">
-					<button type="button" class="btn btn-info service-territory-btn" id="service-territory-btn">Service Territory</button>   
-					<button type="button" class="btn btn-info substations-btn" id="substations-btn">Substations</button>
-					<button type="button" class="btn btn-info distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>   
-					<button type="button" class="btn btn-info solar-projects-btn" id="solar-projects-btn">Solar Projects</button>   
+					<button type="button" class="btn btn-secondary substations-btn" id="substations-btn">Substations</button>
+					<button type="button" class="btn btn-secondary distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>
+					<button type="button" class="btn btn-secondary solar-projects-btn" id="solar-projects-btn">Solar Projects</button> 
+					<button type="button" class="btn btn-secondary service-territory-btn" id="service-territory-btn">Service Territory</button> 
 				</div>
 			</div>
 		</div>
@@ -301,10 +319,10 @@
 			</div>
 			<div id="collapseExplore" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingExplore">
 				<div class="panel-body">
-					<button type="button" class="btn btn-info service-territory-btn" id="service-territory-btn">Service Territory</button>   
-					<button type="button" class="btn btn-info substations-btn" id="substations-btn">Substations</button>
-					<button type="button" class="btn btn-info distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>   
-					<button type="button" class="btn btn-info solar-projects-btn" id="solar-projects-btn">Solar Projects</button>  
+					<button type="button" class="btn btn-secondary substations-btn" id="substations-btn">Substations</button>
+					<button type="button" class="btn btn-secondary distribution-lines-btn" id="distribution-lines-btn">Distribution Lines</button>
+					<button type="button" class="btn btn-secondary solar-projects-btn" id="solar-projects-btn">Solar Projects</button> 
+					<button type="button" class="btn btn-secondary service-territory-btn" id="service-territory-btn">Service Territory</button> 
 				</div>
 			</div>
 		</div>

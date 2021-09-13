@@ -118,6 +118,22 @@ html, body {
   transition: visibility 0s .3s, opacity .3s linear;
 }
 
+.form-container {
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	padding: 25px;
+	border: 2px solid #333;
+	background: #fff;
+	font-size: 1.15em;
+	z-index: 1000;
+}
+
+.form-component {
+	margin-bottom: 15px;
+}
+
+
 .lds-spinner {
   color: white;
   display: inline-block;
