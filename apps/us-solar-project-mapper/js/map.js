@@ -147,17 +147,29 @@ function removeAllLayers () {
 	
 //token = "WGC2LnJ7ItVirMxXF4u6yE0RC19FFX75Tc9-miYlGx82a5dtNUrt0Vg04jxGMTXUSpPG9AQD0LmRwXmDaxv3qPnKwZBhWzQxryTi5jv2DkCD4LyCXbnSOfgp6DrT2_8m3kFaNj8Z8r5T-bV7YcrSpedb1R1ou6VolzYMOoTQSDZ4dE2UIBLIV85mviu9nT-o"
 	
-	
-	
-	
+
+
+function highlightUnit(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 1,
+				opacity: .9,
+				fillOpacity: .9,
+				color: '#83A360',
+				fill: '#83A360',
+    });
+
+}
+
 	
 	
 //
 // feature layers
 //
 
-var point_icon = L.icon({
-	iconUrl: 'img/icon.svg',
+var substation_icon = L.icon({
+	iconUrl: 'img/substations.svg',
 	iconSize: [30,30]
 })
 
@@ -444,13 +456,29 @@ map.on('popupopen', function(e) {
 			substations = L.esri.featureLayer({
 				url: 'https://services5.arcgis.com/V5xqUDxoOJurLR4H/ArcGIS/rest/services/MN_Substations/FeatureServer/0',
 				opacity: 1,
-				token: token
+				token: token,
+				pointToLayer: function (geojson, latlng) {
+					return L.marker(latlng, {
+						icon: substation_icon
+					});
+				},
+				onEachFeature: function(feature, layer) {
+						layer.bindPopup(feature.properties.Name);
+				}
 			})
 
 			distribution = L.esri.featureLayer({
 					url: 'https://services5.arcgis.com/V5xqUDxoOJurLR4H/arcgis/rest/services/MN_Distribution_Lines/FeatureServer/0',
 					opacity: 1,
-					token: token
+					token: token,
+					style: {
+						weight: 2,
+						opacity: 1,
+						color: '#7c6a5d'
+					},
+					onEachFeature: function(feature, layer) {
+							layer.bindPopup(feature.properties.Substation);
+					}
 				})
 
 			projects = L.esri.featureLayer({
@@ -462,9 +490,34 @@ map.on('popupopen', function(e) {
 			service_territory = L.esri.featureLayer({
 					url: 'https://services5.arcgis.com/V5xqUDxoOJurLR4H/ArcGIS/rest/services/MN_ServiceAreas/FeatureServer/0',
 					opacity: 1,
-					token: token
+					token: token,
+					style: function () {
+						return {
+							weight: 1,
+							opacity: .5,
+							fillOpacity: .5,
+							color: '#83A360',
+							fill: '#83A360',
+						}
+					},
+					onEachFeature: function(feature, layer) {
+							layer.bindPopup(feature.properties.mpuc_name);
+							layer.on('mouseover', function() {
+								this.setStyle({
+										weight: 1,
+										opacity: .9,
+										fillOpacity: .9,
+										color: '#83A360',
+										fill: '#83A360',
+								});
+							}),
+							layer.on('mouseout', function () {
+									service_territory.resetStyle(this);
+							});
+					}
 				})
 			});
+
 	
 		$('#itemNJ').click(function () {
 			// workaround to remove results layer

@@ -93,25 +93,25 @@
 					<a class="panel-close" role="button" data-toggle="collapse" tabindex="0" href="#panelInfo"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>  
 				</div>
 			</div>
-			<div id="collapseInfo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingInfo">
-				<div class="panel-body">
+			<div id="collapseInfo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingInfo" >
+				<div class="panel-body" style="min-height: 540px;">
 					<p>Welcome to the US Solar Project Mapper. You can find <span style="color:rgb(245, 149, 28);"><a href="https://www.google.com" target="_blank">user guides and other documentation for this application here.</a></span> Select a market from the menu in the top left corner to begin viewing. Features include: </p>
 					<span style="font-weight: 600">Base Layers:</span>
 					<li>View base layers associated with a market including: Service Territory, Substations, Distrubution Lines, Project Premises. </li>
 					<br>
 					<span style="font-weight: 600">Premises Creation and Editing:</span>
 					<li>Enter the premises editor to draw or edit premises for a project and create KMZ outputs.</li>
-					<br>
-					<br>
-					<span style="font-weight: 600; color:rgb(245, 149, 28);"><a href="https://www.google.com" target="_blank">Need help?</a></span>
+					<br><br>
+					<span style="font-weight: 600; color:rgb(245, 149, 28);">Enter ArcGIS Online Credentials:</span>
+					<br><br>
 					<form id="securedServicesForm">
 						<div class="form-component">
-							<label for="username">User Name</label>
+							<label for="username">User Name&nbsp;</label>
 							<!-- this will be the username for the service -->
 							<input type="text" id="username" />
 						</div>
 						<div class="form-component">
-							<label for="password">Password</label>
+							<label for="password">Password&nbsp;&nbsp;&nbsp;</label>
 							<!-- this will be the password for the service -->
 							<input type="password" id="password">
 						</div>
@@ -120,7 +120,6 @@
 						<br><br>
 						<div class="log-in-status" role="alert"><span></span></div>
 					</form>
-					<br><br><br><br>
 				</div>
 			</div>
 		</div>
