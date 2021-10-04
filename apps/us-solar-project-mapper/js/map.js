@@ -18,12 +18,13 @@ success: function(data) {
 }
 }).error(function() { console.log('error')});
 
-	
+
 var map = L.map('map', {zoomControl: false}).setView([40.03, -93.3], 5),
 	layer = L.esri.basemapLayer("Gray").addTo(map);
 	//layerLabels = L.esri.basemapLayer('GrayLabels').addTo(map);
 	layerLabels = null;
 
+	
 function setBasemap(basemap) {
 	if (layer) {
 		map.removeLayer(layer);
@@ -148,6 +149,24 @@ function removeAllLayers () {
 //token = "WGC2LnJ7ItVirMxXF4u6yE0RC19FFX75Tc9-miYlGx82a5dtNUrt0Vg04jxGMTXUSpPG9AQD0LmRwXmDaxv3qPnKwZBhWzQxryTi5jv2DkCD4LyCXbnSOfgp6DrT2_8m3kFaNj8Z8r5T-bV7YcrSpedb1R1ou6VolzYMOoTQSDZ4dE2UIBLIV85mviu9nT-o"
 	
 
+function projectColor(c) {
+	switch(c) {
+		case 'Lost':
+			return "#D6280D"
+			break;
+		case 'Won':
+			return "#267E1F"
+			break;
+		case 'Open':
+			return "#FDE036"
+			break;
+		default:
+			return "#B9B9B9"
+	}
+}
+
+
+
 
 function highlightUnit(e) {
     var layer = e.target;
@@ -162,8 +181,8 @@ function highlightUnit(e) {
 
 }
 
-	
-	
+
+
 //
 // feature layers
 //
@@ -250,7 +269,7 @@ map.on('mousedown', function(e) {
 map.on('popupopen', function(e) {
 	var px = map.project(e.popup._latlng); // find the pixel location on the map where the popup anchor is
 	px.y -= e.popup._container.clientHeight/2 // find the height of the popup container, divide by 2, subtract from the Y axis of marker location
-	map.panTo(map.unproject(px),{animate: true}); // pan to new center
+	//map.panTo(map.unproject(px),{animate: true}); // pan to new center
 });
 
 
@@ -452,9 +471,9 @@ map.on('popupopen', function(e) {
 			map.setView([46.3, -93.6], 7);
 			btn_classes.forEach(element => resetBtns(element));
 			removeAllLayers();
-
-			substations = L.esri.featureLayer({
-				url: 'https://services5.arcgis.com/V5xqUDxoOJurLR4H/ArcGIS/rest/services/MN_Substations/FeatureServer/0',
+			
+			substations = L.esri.Cluster.featureLayer({
+    		url: 'https://services5.arcgis.com/V5xqUDxoOJurLR4H/ArcGIS/rest/services/MN_Substations/FeatureServer/0',
 				opacity: 1,
 				token: token,
 				pointToLayer: function (geojson, latlng) {
@@ -463,32 +482,62 @@ map.on('popupopen', function(e) {
 					});
 				},
 				onEachFeature: function(feature, layer) {
-						layer.bindPopup(feature.properties.Name);
-				}
+						layer.bindPopup(L.Util.template('<p class="popup-title">{Name} Substation</p><p class="">Utility: {UTILITY}<br>Hosting Capacity: {HostingCapacity}</p>', layer.feature.properties));
+				},
+				disableClusteringAtZoom: 12,
+				// this function defines how the icons
+				// representing clusters are created
+				iconCreateFunction: function (cluster) {
+					// get the number of items in the cluster
+					var count = cluster.getChildCount();
+
+					// figure out how many digits long the number is
+					var digits = (count + '').length;
+
+					// Return a new L.DivIcon with our classes so we can
+					// style them with CSS. Take a look at the CSS in
+					// the <head> to see these styles. You have to set
+					// iconSize to null if you want to use CSS to set the
+					// width and height.
+					return L.divIcon({
+						html: count,
+						className: 'cluster digits-' + digits,
+						iconSize: null
+      		});
+  			}
 			})
+		
 
 			distribution = L.esri.featureLayer({
 					url: 'https://services5.arcgis.com/V5xqUDxoOJurLR4H/arcgis/rest/services/MN_Distribution_Lines/FeatureServer/0',
 					opacity: 1,
 					token: token,
-					style: {
-						weight: 2,
-						opacity: 1,
-						color: '#7c6a5d'
+					style: function (feature) {
+						return 	{weight: 2, opacity: 1, color: feature.properties.HEX}
 					},
 					onEachFeature: function(feature, layer) {
-							layer.bindPopup(feature.properties.Substation);
+							layer.bindPopup(L.Util.template('<p class="popup-title">3-Phase Distribution</p><p class="">Utility: {Utility}<br>Substation: {Substation}<br>Feeder: {Feeder}<br>Feeder Voltage: {FeederVoltagekV}</p>', layer.feature.properties));
+							layer.setStyle({color:feature.properties.HEX});
+							//console.log(feature.properties);
 					}
 				})
 
 			projects = L.esri.featureLayer({
 					url: 'https://services5.arcgis.com/V5xqUDxoOJurLR4H/arcgis/rest/services/MN_USS_Sites/FeatureServer/0',
-					opacity: 1,
-					token: token
+					style: function (feature) {
+							return 	{weight: 1, opacity: 1, fillOpacity: .55, color: projectColor(feature.properties.Status)}
+						},
+					token: token,
+					onEachFeature: function(feature, layer) {
+								layer.bindPopup(L.Util.template('<p class="popup-title">{Deal_Name}</p><p class="">Program: {Program}<br>Substation: {Substation}<br>Status: {Status}<br>Stage: {Stage}</p>', layer.feature.properties));
+								//layer.setStyle({color:feature.properties.HEX});
+								console.log(feature.properties);
+						}
 				})
 
 			service_territory = L.esri.featureLayer({
 					url: 'https://services5.arcgis.com/V5xqUDxoOJurLR4H/ArcGIS/rest/services/MN_ServiceAreas/FeatureServer/0',
+				  where: "mpuc_name IN ('Xcel Energy', 'Minnesota Power Co')",
 					opacity: 1,
 					token: token,
 					style: function () {
@@ -502,7 +551,8 @@ map.on('popupopen', function(e) {
 					},
 					onEachFeature: function(feature, layer) {
 							layer.bindPopup(feature.properties.mpuc_name);
-							layer.on('mouseover', function() {
+						  //console.log(feature.properties);
+							layer.on('click', function() {
 								this.setStyle({
 										weight: 1,
 										opacity: .9,
